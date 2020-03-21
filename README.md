@@ -1,5 +1,4 @@
 # corona-tracker
-Simple corona covid-19 tracker, built with react native
+Simple corona covid-19 tracker, dibangun dengan react-native
 
-## Data
-I use source from [https://github.com/ExpDev07/coronavirus-tracker-api](https://github.com/ExpDev07/coronavirus-tracker-api)
+Data diambil dari  [https://github.com/ExpDev07/coronavirus-tracker-api](https://github.com/ExpDev07/coronavirus-tracker-api)
