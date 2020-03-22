@@ -1,7 +1,7 @@
 import React from 'react';
-import Home from './pages/Home'; //sesuaikan pathnya
+import KawalCoronaNegara from './pages/KawalCoronaNegara'; //sesuaikan pathnya
 export default class App extends React.Component {
   render() {
-    return <Home />;
+    return <KawalCoronaNegara />;
   }
 }
