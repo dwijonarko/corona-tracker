@@ -1,7 +1,15 @@
 import React, {Component} from 'react';
-import {View, Text, ActivityIndicator, StyleSheet, TouchableHighlight,Image} from 'react-native';
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  StyleSheet,
+  TouchableHighlight,
+  Image,
+} from 'react-native';
 
 export default class KawalCorona extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -27,6 +35,7 @@ export default class KawalCorona extends Component {
     } catch (error) {
       console.error(error);
     }
+
   };
   render() {
     if (this.state.isLoading) {
@@ -43,9 +52,9 @@ export default class KawalCorona extends Component {
               World COVID-19 Status
             </Text>
             <Image
-          style={styles.stretch}
-          source={require('../assets/corona.png')}
-        />
+              style={styles.stretch}
+              source={require('../assets/corona.png')}
+            />
           </View>
         </View>
       );
@@ -62,35 +71,41 @@ export default class KawalCorona extends Component {
             ? styles.boxSuccess
             : styles.boxDanger,
         ]}>
-          <Text
-            key={'value' + key}
-            style={{padding: 3, fontSize: 40, fontWeight: 'bold'}}>
-            {numeral(val.value).format('0,0')}
-          </Text>
-          <Text key={'name' + key}>{val.name.toUpperCase()}</Text>
+        <Text
+          key={'value' + key}
+          style={{padding: 3, fontSize: 40, fontWeight: 'bold'}}>
+          {numeral(val.value).format('0,0')}
+        </Text>
+        <Text key={'name' + key}>{val.name.toUpperCase()}</Text>
       </View>
     ));
     return (
       <View style={{flex: 1, padding: 20, flexDirection: 'column'}}>
         <View style={styles.center}>
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-                World COVID-19 Status
-            </Text>  
-            <Image
-          style={styles.stretch}
-          source={require('../assets/corona.png')}
-        />        
-            {buttonsListArr}
-            <Text style={[styles.center,styles.footer]}>
-                Sumber Data : https://kawalcorona.com/api/
-            </Text>
-            <TouchableHighlight  underlayColor="white">
-                <View style={styles.button}>
-                    <Text style={styles.buttonText}>Data Per Negara</Text>
-                </View>
-            </TouchableHighlight>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+            World COVID-19 Status
+          </Text>
+          <Image
+            style={styles.stretch}
+            source={require('../assets/corona.png')}
+          />
+          {buttonsListArr}
+          
+          <TouchableHighlight
+            onPress={() =>
+                this.props.navigation.navigate('Country', {
+                title: 'Covid-19 Status By Country',
+              })
+            }
+            underlayColor="white">
+            <View style={[styles.button,styles.footer]}>
+              <Text style={styles.buttonText}>Data Per Negara</Text>
+            </View>
+          </TouchableHighlight>
+          <Text style={[styles.center]}>
+            Sumber Data : https://kawalcorona.com/api/
+          </Text>
         </View>
-        
       </View>
     );
   }
@@ -126,23 +141,23 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
   },
-  footer:{
-    marginTop:30
+  footer: {
+    marginTop: 30,
   },
-   button: {
-    marginBottom: 30,
+  button: {
+    marginBottom: 10,
     width: 260,
     alignItems: 'center',
-    backgroundColor: '#2196F3'
+    backgroundColor: '#2196F3',
   },
   buttonText: {
     textAlign: 'center',
     padding: 20,
-    color: 'white'
+    color: 'white',
   },
   stretch: {
     width: 80,
     height: 80,
-    resizeMode: 'contain'
-  }
+    resizeMode: 'contain',
+  },
 });

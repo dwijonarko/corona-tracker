@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 
 export default class Home extends Component {
+  const {navigation} = this.props;
+
   constructor(props) {
     super(props);
     this.state = {
