@@ -9,6 +9,18 @@ export const getCountry = async () => {
   }
 };
 
+
+export const getProvince = async () => {
+    try {
+      let response = await fetch('https://api.kawalcorona.com/indonesia/provinsi/');
+      let responseJson = await response.json();
+      return responseJson;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+
 export const getWorld = async url => {
   try {
     let response = await fetch('https://api.kawalcorona.com/' + url);

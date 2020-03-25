@@ -96,6 +96,17 @@ export default class KawalCorona extends Component {
               <Text style={styles.buttonText}>Data Per Negara</Text>
             </View>
           </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() =>
+              this.props.navigation.navigate('Province', {
+                title: 'Data Covid-19 Indonesia',
+              })
+            }
+            underlayColor="white">
+            <View style={[styles.button, styles.footer]}>
+              <Text style={styles.buttonText}>Data Per Provinsi di Indonesia</Text>
+            </View>
+          </TouchableHighlight>
           <Text style={[styles.center]}>
             Sumber Data : https://kawalcorona.com/api/
           </Text>

@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
     elevation: 5,
   },
   boxInfo: {
-    minWidth: 100,
+    minWidth: 120,
     minHeight: 40,
     marginHorizontal: 5,
     justifyContent: 'center',

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, FlatList, ActivityIndicator} from 'react-native';
 import {SearchBar} from 'react-native-elements';
-import {getCountry} from '../function/FetchApi';
+import {getProvince} from '../function/FetchApi';
 import {styles} from '../styles/CountryStyles';
 import numeral from 'numeral';
 import Moment from 'moment';
@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 const danger = <Icon name="sad-cry" size={30} color="#cc" />;
 const warning = <Icon name="sad-tear" size={30} color="#cc" />;
 const success = <Icon name="smile" size={30} color="#cc" />;
-export default class KawalCoronaNegara extends Component {
+export default class KawalCoronaProvinsi extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,7 +27,7 @@ export default class KawalCoronaNegara extends Component {
   _getLatest = async () => {
     this.setState({isLoading: true});
     try {
-      let response = await getCountry();
+      let response = await getProvince();
       await this.setState({
         isLoading: false,
         dataSource: response,
@@ -46,26 +46,25 @@ export default class KawalCoronaNegara extends Component {
       <View style={[styles.box]}>
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <Text style={{padding: 3, fontSize: 20, fontWeight: 'bold'}}>
-            {item.attributes.Country_Region} 
+            {item.attributes.Provinsi} 
           </Text>
           <View style={{flex: 1, flexDirection: 'row'}}>
             <View style={[styles.boxInfo, styles.boxWarning]}>
               <Text style={{padding: 3, fontSize: 20, fontWeight: 'bold'}}>
-                {warning} {numeral(item.attributes.Confirmed).format('0,0')}
+                {warning} {numeral(item.attributes.Kasus_Posi).format('0,0')}
               </Text>
             </View>
             <View style={[styles.boxInfo, styles.boxDanger]}>
               <Text style={{padding: 3, fontSize: 20, fontWeight: 'bold'}}>
-                {danger} {numeral(item.attributes.Deaths).format('0,0')}
+                {danger} {numeral(item.attributes.Kasus_Meni).format('0,0')}
               </Text>
             </View>
             <View style={[styles.boxInfo, styles.boxSuccess]}>
               <Text style={{padding: 3, fontSize: 20, fontWeight: 'bold'}}>
-                {success} {numeral(item.attributes.Recovered).format('0,0')}
+                {success} {numeral(item.attributes.Kasus_Semb).format('0,0')}
               </Text>
             </View>
           </View>
-          <Text style={{marginTop: 5}}>Last Update : {date}</Text>
         </View>
       </View>
     );
@@ -86,16 +85,16 @@ export default class KawalCoronaNegara extends Component {
 
   searchFilterFunction = e => {
     let text = e.toLowerCase();
-    let countries = this.state.dataSource;
-    let filteredList = countries.filter(item => {
-      if (item.attributes.Country_Region.toLowerCase().match(text)) {
+    let provinces = this.state.dataSource;
+    let filteredList = provinces.filter(item => {
+      if (item.attributes.Provinsi.toLowerCase().match(text)) {
         return item;
       }
     });
     this.setState({text});
     if (!text || text === '') {
       this.setState({
-        filteredDataSource: countries,
+        filteredDataSource: provinces,
         text: text,
       });
 
