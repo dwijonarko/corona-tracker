@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, FlatList, ActivityIndicator} from 'react-native';
+import {SearchBar} from 'react-native-elements';
 import {getCountry} from '../function/FetchApi';
 import {styles} from '../styles/CountryStyles';
 import numeral from 'numeral';
@@ -10,6 +11,8 @@ export default class KawalCoronaNegara extends Component {
     this.state = {
       isLoading: true,
       dataSource: [],
+      filteredDataSource: [],
+      text: '',
     };
   }
 
@@ -24,6 +27,7 @@ export default class KawalCoronaNegara extends Component {
       await this.setState({
         isLoading: false,
         dataSource: response,
+        filteredDataSource: response,
       });
     } catch (error) {
       console.error(error);
@@ -38,7 +42,7 @@ export default class KawalCoronaNegara extends Component {
       <View style={[styles.box]}>
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
           <Text style={{padding: 3, fontSize: 20, fontWeight: 'bold'}}>
-            {item.attributes.Country_Region}
+            {item.attributes.Country_Region} 
           </Text>
           <View style={{flex: 1, flexDirection: 'row'}}>
             <View style={[styles.boxInfo, styles.boxWarning]}>
@@ -63,6 +67,44 @@ export default class KawalCoronaNegara extends Component {
     );
   };
 
+  renderHeader = () => {
+    return (
+      <SearchBar
+        placeholder="Type Here..."
+        lightTheme
+        round
+        value={this.state.text}
+        onChangeText={text => this.searchFilterFunction(text)}
+        autoCorrect={false}
+      />
+    );
+  };
+
+  searchFilterFunction = e => {
+    let text = e.toLowerCase();
+    let countries = this.state.dataSource;
+    let filteredList = countries.filter(item => {
+      if (item.attributes.Country_Region.toLowerCase().match(text)) {
+        return item;
+      }
+    });
+    this.setState({text});
+    if (!text || text === '') {
+      this.setState({
+        filteredDataSource: countries,
+        text: text,
+      });
+
+    } else if (!filteredList.length) {
+        this.setState({text});
+    } else if (Array.isArray(filteredList)) {
+      this.setState({
+        text: text,
+        filteredDataSource: filteredList,
+      });
+    }
+  };
+
   render() {
     if (this.state.isLoading) {
       return (
@@ -74,11 +116,12 @@ export default class KawalCoronaNegara extends Component {
     return (
       <View style={{flex: 1, padding: 10}}>
         <FlatList
-          data={this.state.dataSource}
+          data={this.state.filteredDataSource}
           renderItem={this._itemComponent}
           keyExtractor={(item, index) => index.toString()}
           onRefresh={this._getLatest}
           refreshing={this.state.isLoading}
+          ListHeaderComponent={this.renderHeader}
         />
       </View>
     );
