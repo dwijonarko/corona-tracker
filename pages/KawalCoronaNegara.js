@@ -1,11 +1,8 @@
 import React, {Component} from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  ActivityIndicator,
-  StyleSheet,
-} from 'react-native';
+import {View, Text, FlatList, ActivityIndicator} from 'react-native';
+import {getCountry} from '../function/FetchApi';
+import {styles} from '../styles/CountryStyles';
+import numeral from 'numeral';
 import Moment from 'moment';
 export default class KawalCoronaNegara extends Component {
   constructor(props) {
@@ -13,22 +10,20 @@ export default class KawalCoronaNegara extends Component {
     this.state = {
       isLoading: true,
       dataSource: [],
-      localDataSource:[]
     };
   }
 
   componentDidMount() {
-    this._getLatest('https://api.kawalcorona.com');
+    this._getLatest();
   }
 
-  _getLatest = async (url) => {
+  _getLatest = async () => {
     this.setState({isLoading: true});
     try {
-      let response = await fetch(url);
-      let responseJson = await response.json();
+      let response = await getCountry();
       await this.setState({
         isLoading: false,
-        dataSource: responseJson,
+        dataSource: response,
       });
     } catch (error) {
       console.error(error);
@@ -36,27 +31,33 @@ export default class KawalCoronaNegara extends Component {
   };
 
   _itemComponent = ({item}) => {
-    var numeral = require('numeral');
     var d = item.attributes.Last_Update;
     var timeStamp = new Date(d);
     var date = Moment(timeStamp).format('DD-MM-YYYY HH:mm');
     return (
-      <View
-        style={[styles.box]}>
-        <View style={{justifyContent: 'center', alignItems: 'center',}}>
-            <Text style={{padding: 3, fontSize: 20,fontWeight:'bold'}}>{item.attributes.Country_Region}</Text>
-            <View style={{flex:1,flexDirection:'row'}}>
-                <View style={[styles.boxInfo,styles.boxWarning]}>
-                    <Text style={{padding: 3, fontSize: 20,fontWeight:'bold'}}>{numeral(item.attributes.Confirmed).format('0,0')}</Text>
-                </View>
-                <View style={[styles.boxInfo,styles.boxDanger]}>
-                    <Text style={{padding: 3, fontSize: 20,fontWeight:'bold'}}>{numeral(item.attributes.Deaths).format('0,0')}</Text>
-                </View>
-                <View style={[styles.boxInfo,styles.boxSuccess]}>
-                    <Text style={{padding: 3, fontSize: 20,fontWeight:'bold'}}>{numeral(item.attributes.Recovered).format('0,0')}</Text>
-                </View>
+      <View style={[styles.box]}>
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{padding: 3, fontSize: 20, fontWeight: 'bold'}}>
+            {item.attributes.Country_Region}
+          </Text>
+          <View style={{flex: 1, flexDirection: 'row'}}>
+            <View style={[styles.boxInfo, styles.boxWarning]}>
+              <Text style={{padding: 3, fontSize: 20, fontWeight: 'bold'}}>
+                {numeral(item.attributes.Confirmed).format('0,0')}
+              </Text>
             </View>
-            <Text style={{marginTop:5}}>Last Update : {date}</Text>
+            <View style={[styles.boxInfo, styles.boxDanger]}>
+              <Text style={{padding: 3, fontSize: 20, fontWeight: 'bold'}}>
+                {numeral(item.attributes.Deaths).format('0,0')}
+              </Text>
+            </View>
+            <View style={[styles.boxInfo, styles.boxSuccess]}>
+              <Text style={{padding: 3, fontSize: 20, fontWeight: 'bold'}}>
+                {numeral(item.attributes.Recovered).format('0,0')}
+              </Text>
+            </View>
+          </View>
+          <Text style={{marginTop: 5}}>Last Update : {date}</Text>
         </View>
       </View>
     );
@@ -67,21 +68,11 @@ export default class KawalCoronaNegara extends Component {
       return (
         <View style={{flex: 1, padding: 20}}>
           <ActivityIndicator />
-        <View style={{justifyContent:'center',alignContent:'center',alignItems:'center'}}>
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-                World COVID-19 Status - By Country
-            </Text>
-          </View>
         </View>
       );
     }
     return (
-      <View style={{flex: 1, padding: 20}}>
-        <View style={{justifyContent:'center',alignContent:'center',alignItems:'center'}}>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-            World COVID-19 Status - By Country
-          </Text>
-        </View>
+      <View style={{flex: 1, padding: 10}}>
         <FlatList
           data={this.state.dataSource}
           renderItem={this._itemComponent}
@@ -93,41 +84,3 @@ export default class KawalCoronaNegara extends Component {
     );
   }
 }
-const styles = StyleSheet.create({
-  box: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: 100,
-    margin: 10,
-    minWidth:100,
-    padding:10,
-    borderRadius: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
-  },
-  boxInfo:{
-    minWidth:100,
-    minHeight:40,
-    marginHorizontal:5,
-    justifyContent:'center',
-    paddingLeft:10
-  },
-  boxWarning: {
-    backgroundColor: '#fb3',
-  },
-  boxDanger: {
-    backgroundColor: '#ff3547',
-  },
-  boxSuccess: {
-    backgroundColor: '#00c851',
-  },
-});

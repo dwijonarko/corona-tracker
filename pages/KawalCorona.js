@@ -3,10 +3,12 @@ import {
   View,
   Text,
   ActivityIndicator,
-  StyleSheet,
   TouchableHighlight,
   Image,
 } from 'react-native';
+import {getWorld} from '../function/FetchApi';
+import {styles} from '../styles/HomeStyle';
+import numeral from 'numeral';
 
 export default class KawalCorona extends Component {
 
@@ -26,28 +28,21 @@ export default class KawalCorona extends Component {
   _getLatest = async url => {
     this.setState({isLoading: true});
     try {
-      let response = await fetch('https://api.kawalcorona.com/' + url);
-      let responseJson = await response.json();
+      let response = await getWorld(url);
       await this.setState({
         isLoading: false,
-        results: [...this.state.results, responseJson],
+        results: [...this.state.results, response],
       });
     } catch (error) {
       console.error(error);
     }
-
   };
   render() {
     if (this.state.isLoading) {
       return (
         <View style={{flex: 1, padding: 20}}>
           <ActivityIndicator />
-          <View
-            style={{
-              justifyContent: 'center',
-              alignContent: 'center',
-              alignItems: 'center',
-            }}>
+          <View style={styles.center}>
             <Text style={{fontSize: 20, fontWeight: 'bold'}}>
               World COVID-19 Status
             </Text>
@@ -59,7 +54,6 @@ export default class KawalCorona extends Component {
         </View>
       );
     }
-    const numeral = require('numeral');
     const buttonsListArr = this.state.results.map((val, key) => (
       <View
         key={key}
@@ -90,15 +84,15 @@ export default class KawalCorona extends Component {
             source={require('../assets/corona.png')}
           />
           {buttonsListArr}
-          
+
           <TouchableHighlight
             onPress={() =>
-                this.props.navigation.navigate('Country', {
+              this.props.navigation.navigate('Country', {
                 title: 'Covid-19 Status By Country',
               })
             }
             underlayColor="white">
-            <View style={[styles.button,styles.footer]}>
+            <View style={[styles.button, styles.footer]}>
               <Text style={styles.buttonText}>Data Per Negara</Text>
             </View>
           </TouchableHighlight>
@@ -110,54 +104,3 @@ export default class KawalCorona extends Component {
     );
   }
 }
-const styles = StyleSheet.create({
-  box: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 100,
-    margin: 10,
-    minWidth: 200,
-    borderRadius: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  boxWarning: {
-    backgroundColor: '#fb3',
-  },
-  boxDanger: {
-    backgroundColor: '#ff3547',
-  },
-  boxSuccess: {
-    backgroundColor: '#00c851',
-  },
-  center: {
-    justifyContent: 'center',
-    alignContent: 'center',
-    alignItems: 'center',
-  },
-  footer: {
-    marginTop: 30,
-  },
-  button: {
-    marginBottom: 10,
-    width: 260,
-    alignItems: 'center',
-    backgroundColor: '#2196F3',
-  },
-  buttonText: {
-    textAlign: 'center',
-    padding: 20,
-    color: 'white',
-  },
-  stretch: {
-    width: 80,
-    height: 80,
-    resizeMode: 'contain',
-  },
-});
