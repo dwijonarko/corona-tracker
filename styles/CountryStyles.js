@@ -18,15 +18,23 @@ export const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
   },
   boxInfo: {
-    minWidth: 120,
-    minHeight: 40,
+    alignSelf: 'center',
+    minWidth:100,
     marginHorizontal: 5,
     justifyContent: 'center',
-    paddingLeft: 10,
+    padding: 5,
+    borderRadius:5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   boxWarning: {
     backgroundColor: '#fb3',

@@ -96,14 +96,12 @@ export default class KawalCoronaNegara extends Component {
     if (!text || text === '') {
       this.setState({
         filteredDataSource: countries,
-        text: text,
       });
 
     } else if (!filteredList.length) {
         this.setState({text});
     } else if (Array.isArray(filteredList)) {
       this.setState({
-        text: text,
         filteredDataSource: filteredList,
       });
     }

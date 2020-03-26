@@ -95,14 +95,12 @@ export default class KawalCoronaProvinsi extends Component {
     if (!text || text === '') {
       this.setState({
         filteredDataSource: provinces,
-        text: text,
       });
 
     } else if (!filteredList.length) {
         this.setState({text});
     } else if (Array.isArray(filteredList)) {
       this.setState({
-        text: text,
         filteredDataSource: filteredList,
       });
     }
